@@ -42,3 +42,8 @@ docker push eaceto/passwordapp
 ```sh
 docker run --rm -d -p 8080:8080 eaceto/passwordapp
 ```
+
+## Links
+
+* [Imagen en Docker Hub](https://hub.docker.com/repository/docker/eaceto/passwordapp)
+* [Dockerfile](https://github.com/eaceto/taller-docker/blob/main/ejercicio_4/Dockerfile)
