@@ -29,5 +29,8 @@ EXPOSE 8080/tcp
 # From now on, all commands as run as *appuser*
 USER appuser
 
+# Add a health check to verify if the service is running
+HEALTHCHECK --start-period=10s --interval=60s --timeout=5s --retries=3 CMD curl -f http://localhost:8080/ || exit 1
+
 # Run the app
 CMD ["java","-jar","/applications/app.jar"]
