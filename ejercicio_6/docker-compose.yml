@@ -1,0 +1,50 @@
+# lastest Docker Compose version
+version: "3.9"
+
+# Services declaration
+services:
+
+  # Creates a balancer using NGINX
+  # nginx.conf declares an upstream with two servers, and a proxy-pass rule
+  balancer:
+    image: nginx:1.19.8-alpine
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    ports:
+      - 8080:80
+    environment:
+      - NGINX_PORT=80
+    healthcheck:
+      test: ["CMD-SHELL", "wget -O /dev/null http://localhost/swagger-ui.html || exit 1"]
+      interval: 10s
+      timeout: 10s
+      start_period: 10s
+      retries: 5
+
+    depends_on:
+      app1:
+        condition: service_healthy
+      app2:
+        condition: service_healthy
+
+  app1:
+    image: eaceto/passwordapp:4.0.1
+    expose:
+      - 8080
+    healthcheck:
+      test: ["CMD-SHELL", "wget -O /dev/null http://localhost:8080/swagger-ui.html || exit 1"]
+      interval: 10s
+      timeout: 10s
+      start_period: 10s
+      retries: 5
+
+  app2:
+    image: eaceto/passwordapp:4.0.1
+    expose:
+      - 8080
+    healthcheck:
+      test: ["CMD-SHELL", "wget -O /dev/null http://localhost:8080/swagger-ui.html || exit 1"]
+      interval: 10s
+      timeout: 10s
+      start_period: 10s
+      retries: 5
