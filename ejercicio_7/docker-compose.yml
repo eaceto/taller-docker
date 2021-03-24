@@ -10,8 +10,8 @@ services:
     labels:
       - "Database"
       - "REDIS"
-    ports:
-      - 6379:6379
+    expose:
+      - 6379
     image: redis:6.2.1-alpine
     volumes:
       - "redis-data:/data:rw"
@@ -33,6 +33,12 @@ services:
       - "db:redis"
     networks:
       - service-network
+    healthcheck:
+      test: ["CMD-SHELL", "wget -O /dev/null http://localhost:8080/actuator/health || exit 1"]
+      interval: 10s
+      timeout: 10s
+      start_period: 10s
+      retries: 5
 
 volumes:
   redis-data:
