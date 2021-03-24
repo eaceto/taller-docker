@@ -15,7 +15,7 @@ services:
     environment:
       - NGINX_PORT=80
     healthcheck:
-      test: ["CMD-SHELL", "wget -O /dev/null http://localhost/swagger-ui.html || exit 1"]
+      test: ["CMD-SHELL", "wget -O /dev/null http://localhost/health || exit 1"]
       interval: 10s
       timeout: 10s
       start_period: 10s
@@ -28,22 +28,22 @@ services:
         condition: service_healthy
 
   app1:
-    image: eaceto/passwordapp:4.0.1
+    image: nicopaez/password-api
     expose:
-      - 8080
+      - 3000
     healthcheck:
-      test: ["CMD-SHELL", "wget -O /dev/null http://localhost:8080/swagger-ui.html || exit 1"]
+      test: ["CMD-SHELL", "wget -O /dev/null http://localhost:3000/health || exit 1"]
       interval: 10s
       timeout: 10s
       start_period: 10s
       retries: 5
 
   app2:
-    image: eaceto/passwordapp:4.0.1
+    image: nicopaez/password-api
     expose:
-      - 8080
+      - 3000
     healthcheck:
-      test: ["CMD-SHELL", "wget -O /dev/null http://localhost:8080/swagger-ui.html || exit 1"]
+      test: ["CMD-SHELL", "wget -O /dev/null http://localhost:3000/health || exit 1"]
       interval: 10s
       timeout: 10s
       start_period: 10s
