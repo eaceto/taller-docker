@@ -1,0 +1,26 @@
+### Health check
+GET http://localhost:8080/actuator/health
+Accept: application/json
+
+### List existent users
+GET http://localhost:8080/users/
+Accept: application/json
+
+### Create a user
+POST http://localhost:8080/users/
+Content-Type: application/json
+
+{
+  "userName": "eaceto", "displayName": "Ezequiel L. Aceto", "password": "12345678"
+}
+
+### Login
+POST http://localhost:8080/users/login
+Content-Type: application/json
+
+{
+  "userName": "eaceto", "password": "12345678"
+}
+
+###
+
