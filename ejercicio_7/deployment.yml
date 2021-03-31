@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: password-api
+spec:
+  selector:
+    matchLabels:
+      app: password-api
+  template:
+    metadata:
+      labels:
+        app: password-api
+    spec:
+      containers:
+        # Nombre del container
+      - name: password-api
+        # Imagen a partir de la cual se genera el container
+        image: nicopaez/password-api
+        # Definimos limites a los recursos que puede consumir el container
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 3000
+        # Definimos una prueba de vida de la aplicación, consultando el endpoint de health check
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 3000
+          initialDelaySeconds: 5
+          periodSeconds: 10
+  replicas: 3
