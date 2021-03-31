@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: k8s-bot
+  labels:
+    app: k8s-bot
+spec:
+  selector:
+    matchLabels:
+      app: k8s-bot
+  template:
+    metadata:
+      labels:
+        app: k8s-bot
+    spec:
+      containers:
+      - name: k8s-bot
+        image: nicopaez/telegrambot:0.0.7
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        env:
+            # Obtenemos la veriable de ambiente TELEGRAM_TOKEN del archivo de secrets
+          - name: TELEGRAM_TOKEN
+            valueFrom:
+              secretKeyRef:
+                # Nombre de la variable que almacena el secret
+                key: bot_api_token
+                # Nombre del secret
+                name: k8s-bot-telegram-token
