@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: jobvacancy-config
+  labels:
+    app: jobvacancy
+data:
+  POSTGRES_USER: postgres
+  RACK_ENV: "production"
+  PORT: "3000"
+  DATABASE_URL: postgres:PW4?postgres@jobvacancy-db:5432/jobvacancy

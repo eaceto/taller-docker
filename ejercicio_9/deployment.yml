@@ -1,0 +1,64 @@
+# Postgres Service
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: jobvacancy
+  labels:
+    app: jobvacancy
+spec:
+  type: NodePort
+  ports:
+   - port: 5432
+     targetPort: 5432
+  selector:
+   app: jobvacancy
+
+---
+
+# Deployment config for Postgres and WebApp
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jobvacancy
+  labels:
+    app: jobvacancy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: jobvacancy
+  template:
+    metadata:
+      labels:
+        app: jobvacancy
+    spec:
+      containers:
+      - name: webapp
+        image: nicopaez/jobvacancy-ruby:1.0.5
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "200m"
+          limits:
+            memory: "512Mi"
+            cpu: "400m"
+        ports:
+          - containerPort: 3000
+        env:
+          - name: DATABASE_URL
+            valueFrom:
+              configMapKeyRef:
+                key: DATABASE_URL
+                name: jobvacancy-config
+          - name: PORT
+            valueFrom:
+              configMapKeyRef:
+                key: PORT
+                name: jobvacancy-config
+          - name: RACK_ENV
+            valueFrom:
+              configMapKeyRef:
+                key: RACK_ENV
+                name: jobvacancy-config

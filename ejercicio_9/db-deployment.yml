@@ -1,0 +1,59 @@
+# Postgres Service
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: jobvacancy-db
+  labels:
+    app: jobvacancy-db
+spec:
+  type: NodePort
+  ports:
+   - port: 5432
+     targetPort: 5432
+  selector:
+   app: jobvacancy-db
+
+---
+
+# Deployment config for Postgres and WebApp
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jobvacancy-db
+  labels:
+    app: jobvacancy-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: jobvacancy-db
+  template:
+    metadata:
+      labels:
+        app: jobvacancy-db
+    spec:
+      containers:
+      - name: db
+        image: postgres:10.4-alpine
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "200m"
+          limits:
+            memory: "256Mi"
+            cpu: "400m"
+        ports:
+          - containerPort: 5432
+        env:
+          - name: POSTGRES_USER
+            valueFrom:
+              configMapKeyRef:
+                key: POSTGRES_USER
+                name: jobvacancy-config
+          - name: POSTGRES_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: POSTGRES_PASSWORD
+                name: jobvacancy-secret
